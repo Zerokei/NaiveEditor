@@ -17,6 +17,7 @@ This is a small project to exercise the bash script. The goal is to achieve a vi
 
 ## Todo
 - [x] View the text
+- [x] View the cursor
 - [ ] Move the cursor by 'hjkl'
 - [ ] ...
 
