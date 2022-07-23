@@ -16,11 +16,11 @@ This is a small project to exercise the bash script. The goal is to achieve a vi
 	- Quit :q
 
 ## Todo
-- [ ] View the text
+- [x] View the text
 - [ ] Move the cursor by 'hjkl'
 - [ ] ...
 
 ## Usage
 ## References
-[[E]ditor [I]n [S]hell - by Geronymos](https://github.com/Geronymos/EIS)
+[[E]ditor [I]n [S]hell - by Geronymos](https://github.com/Geronymos/EIS)  
 [XED](https://github.com/zcjrony/xed)
