@@ -1,8 +1,8 @@
 # Naive Editor :ram:
 Naive Editor is a simple editor designed with bash language.
-## About
 
-This is a small project to exercise the bash script. The goal is to achieve a vim-like experience with a text editor. This time use the :ram: as the identifier for the project
+## About
+This is a training project for bash scripts with the goal of creating a text editor for vim-like experiences.
 
 ## Features
 - Normal Mode
@@ -14,12 +14,6 @@ This is a small project to exercise the bash script. The goal is to achieve a vi
 - Save and quit
 	- Save :w
 	- Quit :q
-
-## Todo
-- [x] View the text
-- [x] View the cursor
-- [ ] Move the cursor by 'hjkl'
-- [ ] ...
 
 ## Usage
 ## References
