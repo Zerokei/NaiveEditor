@@ -59,6 +59,7 @@ do
             $'j') posc=$posc+1 ;;
             $'k') posc=$posc-1 ;;
             $'i') mode=1 ;;
+            # $':') mode=2 ;;
         esac
     elif [[ "$mode" -eq 1 ]]
     then
@@ -71,14 +72,15 @@ do
                     value=${value:0:$(($posl-1))}${value:$(($posl))}
                     arrVar[$posc]=$value
                     posl=$posl-1
-                else
-                    newVar=(${arrVar[@]:0:$((posc))})
-                    newVar+=(${arrVar[@]:$((posc+1))})
-                    newVar[$posc]=${newVar[$posc]}${newVar[$((posc+1))]}
-                    arrVar=$newVar
-                    if [[ "$posc" -gt 0 ]] ;then
+                else # the line should be moved to the previous one.
+                    # [0...posc-1][posc+1...end]
+                    if [[ "$posc" -gt 0 ]] ;then # if it is the first line, there is no need to move
+                        newVar=(${arrVar[@]:0:$((posc))})
+                        newVar+=(${arrVar[@]:$((posc+1))})
+                        posl=${#arrVar[$((posc-1))]}-2
+                        newVar[$((posc-1))]=${newVar[$((posc-1))]:0:$((${#arrVar[$posc-1]}-2))}${arrVar[$((posc))]}
+                        arrVar=(${newVar[@]})
                         posc=$posc-1
-                        posl=${#arrVar[$posc]}-2
                     fi
                 fi ;;
             $"") # enter key
@@ -89,13 +91,15 @@ do
                     newVar[posc]=${arrVar[posc]:0:posl}"\n"
                     newVar[((posc+1))]=${arrVar[posc]:posl}
                     arrVar=(${newVar[@]})
+                    posc=$posc+1
+                    posl=0
                 ;;
             *)  value=${arrVar[$posc]}
                 value=${value:0:$(($posl))}$acc${value:$(($posl))}
-                arrVar[$posc]=$value ;;
+                arrVar[$posc]=$value 
+                posl=$posl+1 ;;
         esac
     fi
-
     if [[ "$posc" -lt 0 ]]
     then
         posc=0
