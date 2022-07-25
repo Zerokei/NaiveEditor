@@ -1,7 +1,12 @@
-#!/bin/bash
-# Demonstrate how read actually works
-echo What cars do you like?
-read car1 car2 car3
-echo Your first car was: $car1
-echo Your second car was: $car2
-echo Your third car was: $car3
+echo "usage: up [--level <n>| -n <levels>][--help][--version]
+
+Report bugs to: 
+up home page: "
+echo << EOF
+ _   _         _              ______     _  _  _               
+| \ | |       (_)            |  ____|   | |(_)| |              
+|  \| |  __ _  _ __   __ ___ | |__    __| | _ | |_  ___   _ __ 
+| . ` | / _` || |\ \ / // _ \|  __|  / _` || || __|/ _ \ | '__|
+| |\  || (_| || | \ V /|  __/| |____| (_| || || |_| (_) || |   
+|_| \_| \__,_||_|  \_/  \___||______|\__,_||_| \__|\___/ |_|   
+EOF

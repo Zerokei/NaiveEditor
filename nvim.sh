@@ -6,9 +6,10 @@ tput civis # hide the cursor
 # store the text
 lines=$(wc -l $input | awk '{print $1;}')
 arrVar=()
-while read -r line
+# read file with spaces of prefix, credit to https://www.codegrepper.com/code-examples/shell/bash+read+file+line+by+line+with+spaces
+while IFS= read -r
 do
-	arrVar+=("$line\n")
+	arrVar+=("$REPLY\n")
 done < "$input"
 
 
@@ -111,7 +112,8 @@ do
                     $'w') 
                         save
                         print_in_bottom 'right' 'SAVE SUCCESSFULLY!' 'yellow' ;;
-                    $'q') exit ;;
+                    $'q') 
+                        exit ;;
                 esac
                 continue
         esac
@@ -122,18 +124,18 @@ do
                 mode=0 ;; 
             $'\x7f') # back key
                 if [[ "$posl" -gt 0 ]] ;then
-                    value=${arrVar[$posc]}
-                    value=${value:0:$(($posl-1))}${value:$(($posl))}
-                    arrVar[$posc]=$value
+                    value="${arrVar[$posc]}"
+                    value="${value:0:$(($posl-1))}${value:$(($posl))}"
+                    arrVar[$posc]="$value"
                     posl=$posl-1
                 else # the line should be moved to the previous one.
                     # [0...posc-1][posc+1...end]
                     if [[ "$posc" -gt 0 ]] ;then # if it is the first line, there is no need to move
-                        newVar=(${arrVar[@]:0:$((posc))})
-                        newVar+=(${arrVar[@]:$((posc+1))})
+                        newVar=("${arrVar[@]:0:$((posc))}")
+                        newVar+=("${arrVar[@]:$((posc+1))}")
                         posl=${#arrVar[$((posc-1))]}-2
-                        newVar[$((posc-1))]=${newVar[$((posc-1))]:0:$((${#arrVar[$posc-1]}-2))}${arrVar[$((posc))]}
-                        arrVar=(${newVar[@]})
+                        newVar[$((posc-1))]="${newVar[$((posc-1))]:0:$((${#arrVar[$posc-1]}-2))}${arrVar[$((posc))]}"
+                        arrVar=("${newVar[@]}")
                         posc=$posc-1
                     fi
                 fi ;;
@@ -144,16 +146,16 @@ do
                 posl=$posl+1 ;;
             $'\n') # enter key
                     # [0..posc][""][posc+1]
-                newVar=(${arrVar[@]:0:$((posc+1))})
+                newVar=("${arrVar[@]:0:$((posc+1))}")
                 newVar+=("\n")
-                newVar+=(${arrVar[@]:$((posc+1))})
-                newVar[posc]=${arrVar[posc]:0:posl}"\n"
-                newVar[((posc+1))]=${arrVar[posc]:posl}
-                arrVar=(${newVar[@]})
+                newVar+=("${arrVar[@]:$((posc+1))}")
+                newVar[posc]="${arrVar[posc]:0:posl}""\n"
+                newVar[((posc+1))]="${arrVar[posc]:posl}"
+                arrVar=("${newVar[@]}")
                 posc=$posc+1
                 posl=0
                 ;;
-            *)  value=${arrVar[$posc]}
+            *)  value="${arrVar[$posc]}"
                 value="${value:0:$(($posl))}$acc${value:$(($posl))}"
                 arrVar[$posc]="$value"
                 posl=$posl+1 ;;
