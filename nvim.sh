@@ -1,20 +1,38 @@
 #!/bin/bash
-input=$1
-echo $input
-
+input=""
+input=$2
+arrVar=()
+case $1 in
+    $'-o') 
+        if [ -e $2 ]
+        then
+            echo ""
+        else
+            arrVar+=(" \n")
+        fi;;
+    $'-v') 
+        echo "version         1.0.0"
+        echo "author          Zerokei"
+        echo "license         GNU General Public License v3.0" 
+        exit;;
+    $'-h') 
+        ./help.sh 
+        exit;;
+    *) 
+        echo "NaiveEditor: error: unrecognized arguments: $1"
+        echo "Try './NaiveEditor -h' for more information." ;;
+esac
 tput civis # hide the cursor
 # store the text
 lines=$(wc -l $input | awk '{print $1;}')
-arrVar=()
+
 # read file with spaces of prefix, credit to https://www.codegrepper.com/code-examples/shell/bash+read+file+line+by+line+with+spaces
 while IFS= read -r
 do
 	arrVar+=("$REPLY\n")
 done < "$input"
 
-
 # output the text
-echo "wow"
 mode=0
 bottom_text=""
 print_in_bottom () {
@@ -82,17 +100,6 @@ do
     read -sN1 -t 0.0001 k3
     acc+=${k1}${k2}${k3}
 
-    # echo $acc
-    # timedout_read 1 acc
-    # echo $acc
-    # if [ -n $key ];then
-    #     acc=$key
-    #     echo $acc| tr -d "\n" | od -An -t dC
-    # fi
-    # continue
-    # if [[ "$key" == "l" ]]; then
-    #     exit
-    # fi
     if [[ "$mode" -eq 0 ]]
     then
         case $acc in
@@ -113,6 +120,7 @@ do
                         save
                         print_in_bottom 'right' 'SAVE SUCCESSFULLY!' 'yellow' ;;
                     $'q') 
+						tput cvvis
                         exit ;;
                 esac
                 continue
@@ -161,6 +169,7 @@ do
                 posl=$posl+1 ;;
         esac
     fi
+    lines=${#arrVar[@]}
     if [[ "$posc" -lt 0 ]]
     then
         posc=0
